@@ -36,34 +36,9 @@ export function SiteHeader() {
             : "bg-transparent"
         )}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="rounded-full transition-transform hover:-translate-y-0.5"
-            aria-label="Mini Techies home"
-          >
-            <Logo />
-          </Link>
-
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-full px-4 py-2 text-sm font-semibold text-ink/75 transition hover:bg-white/70 hover:text-ink"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <AccessibilityMenu />
-            <div className="hidden sm:block">
-              <Button href="/#waitlist" size="sm">
-                Join the waitlist
-              </Button>
-            </div>
+        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Left: primary nav (desktop) / menu button (mobile) */}
+          <div className="flex items-center justify-self-start">
             <button
               type="button"
               className="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-ink ring-1 ring-ink/10 lg:hidden"
@@ -80,6 +55,37 @@ export function SiteHeader() {
                 />
               </svg>
             </button>
+
+            <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+              {nav.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-full px-4 py-2 text-sm font-semibold text-ink/75 transition hover:bg-white/70 hover:text-ink"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Center: logo */}
+          <Link
+            href="/"
+            className="justify-self-center rounded-full transition-transform hover:-translate-y-0.5"
+            aria-label="Mini Techies home"
+          >
+            <Logo />
+          </Link>
+
+          {/* Right: actions */}
+          <div className="flex items-center gap-2 justify-self-end">
+            <AccessibilityMenu />
+            <div className="hidden sm:block">
+              <Button href="/#waitlist" size="sm">
+                Join the waitlist
+              </Button>
+            </div>
           </div>
         </div>
 
