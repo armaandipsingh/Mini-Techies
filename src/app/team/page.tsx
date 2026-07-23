@@ -69,13 +69,12 @@ export default function TeamPage() {
         />
         <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 md:grid-cols-3">
           {team.map((m, i) => (
-            <Reveal key={m.name} delay={i * 0.08}>
+            <Reveal key={m.name} delay={i * 0.08} className="h-full">
               <WelcomeCard
                 name={m.name}
                 title={m.title}
                 initials={m.initials}
                 accent={m.accent}
-                card={m.card}
                 photo={m.photo}
               />
             </Reveal>
