@@ -7,9 +7,9 @@ export const site = {
     "Mini Techies gamifies science, technology, engineering, and math for kids ages 7-18. Built on real school curriculum, enhanced with AI, with progress tracking, certificates, and built-in support for neurodiverse learners. No ads, ever.",
   email: "info@mini-techies.ca",
   social: {
-    instagram: "https://instagram.com",
-    linkedin: "https://linkedin.com",
-    youtube: "https://youtube.com",
+    instagram: "https://www.instagram.com/mini.techies/",
+    linkedin: "https://www.linkedin.com/company/mini-techies/",
+    facebook: "https://www.facebook.com/profile.php?id=61579626176226",
   },
 } as const;
 

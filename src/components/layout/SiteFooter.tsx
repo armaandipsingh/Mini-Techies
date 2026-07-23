@@ -77,12 +77,12 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href={site.social.youtube}
+                  href={site.social.facebook}
                   className="text-cream/80 transition hover:text-sun"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  YouTube
+                  Facebook
                 </a>
               </li>
             </ul>
