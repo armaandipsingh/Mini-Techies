@@ -1,3 +1,5 @@
+import { saveWaitlistEntry } from "@/lib/waitlist-db";
+
 export type WaitlistEntry = {
   email: string;
   name?: string;
@@ -6,43 +8,35 @@ export type WaitlistEntry = {
 };
 
 /**
- * Delivers a waitlist signup to the configured destination.
+ * Saves a waitlist signup to the database, then optionally notifies
+ * configured destinations (webhook / Resend).
  *
- * The destination is a config swap via env vars (no code changes needed):
- *   - WAITLIST_WEBHOOK_URL  -> POST JSON to a Google Sheet / Zapier / CRM webhook
- *   - RESEND_API_KEY (+ WAITLIST_NOTIFY_EMAIL, WAITLIST_FROM_EMAIL) -> email notification
- *   - (none set)            -> logged to the server console (safe default for dev)
- *
- * Returns true if at least one provider accepted the entry (or if running in
- * the console-only default, which always "succeeds").
+ * Returns true when the database write succeeded.
  */
 export async function deliverWaitlistEntry(
   entry: WaitlistEntry
 ): Promise<boolean> {
-  const tasks: Promise<boolean>[] = [];
-  let configured = false;
+  try {
+    await saveWaitlistEntry(entry);
+  } catch (err) {
+    console.error("[waitlist] database save failed:", err);
+    return false;
+  }
 
+  // Optional side-channels — failures here do not fail the signup.
   const webhook = process.env.WAITLIST_WEBHOOK_URL;
   if (webhook) {
-    configured = true;
-    tasks.push(sendWebhook(webhook, entry));
+    void sendWebhook(webhook, entry);
   }
 
   const resendKey = process.env.RESEND_API_KEY;
   const notify = process.env.WAITLIST_NOTIFY_EMAIL;
   const from = process.env.WAITLIST_FROM_EMAIL;
   if (resendKey && notify && from) {
-    configured = true;
-    tasks.push(sendResend(resendKey, from, notify, entry));
+    void sendResend(resendKey, from, notify, entry);
   }
 
-  if (!configured) {
-    console.info("[waitlist] new signup (no provider configured):", entry);
-    return true;
-  }
-
-  const results = await Promise.allSettled(tasks);
-  return results.some((r) => r.status === "fulfilled" && r.value);
+  return true;
 }
 
 async function sendWebhook(
